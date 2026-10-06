@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starlink Direct-To-Phone Internet</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=content_copy" />
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="./main.js"></script>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">Starlink Home</div>
+            <div class="subtitle">(Direct-to-phone internet)</div>
+            <div class="subtitle" id="sub">High-speed internet. Works on any smart phone, anywhere.</div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number" id="connected-devices">12,450</div>
+                <div class="stat-label">Connected Devices</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Countries</div>
+            </div>
+        </div>
+        <div class="announcement-container">
+            <div class="announcement">
+                <h2 class="announcement-title">Starlink Partnership with Safaricom</h2>
+                <p class="announcement-text">
+                    The starlink direct-to-phone service is now available in kenya. 
+                    Kenyans can now access internet cheaply anywhere they are, with super fast speeds, at an incredibly low cost.
+                </p>
+                <p class="announcement-text">
+                    Starlink to phone service does not require any other devices to run - no special router, 
+                    satellite dish or fibre cable. Just a phone and a sim card and you can access 
+                    internet anywhere you are, even in the most remote areas. Just purchase any package and you are ready to go!
+                </p>
+                <button class="how-it-works-button" onclick="scrollToHowItWorks()">
+                    How It Works <span class="arrow">→</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="plans-container">
+
+            <div class="plan-card">
+                <h2 class="plan-price">5GB for 1day</h2>
+                <!-- <div class="plan-price">100<span class="plan-currency">Ksh</span></div>
+                <div class="plan-description">Great for social media and light streaming</div> -->
+                <ul class="plan-features">
+                    <li>5GB Data</li>
+                    <li>1 Day Validity</li>
+                    <li>Standard Speed</li>
+                </ul>
+                <button class="buy-button" onclick="openPaymentModal('Standard Plan', 100)">Ksh 100<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg></button>
+            </div>
+            
+            <div class="plan-card">
+                <h2 class="plan-price">20GB for 7days</h2>
+               
+                <!-- <div class="plan-price">215<span class="plan-currency">Ksh</span></div>
+                <div class="plan-description">Ideal for streaming and video calls</div> -->
+                <ul class="plan-features">
+                    <li>20GB Data</li>
+                    <li>7 Days Validity</li>
+                    <li>High Speed</li>
+                    <li>Priority Support</li>
+                </ul>
+                <button class="buy-button" onclick="openPaymentModal('Premium Plan', 215)">Ksh 215 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg></button>
+            </div>
+            
+            <div class="plan-card">
+                <h2 class="plan-price">60GB for 14days</h2>
+                <!-- <div class="plan-price">300<span class="plan-currency">Ksh</span></div>
+                <div class="plan-description">Perfect for heavy users and gaming</div> -->
+                <ul class="plan-features">
+                    <li>60GB Data</li>
+                    <li>14 Days Validity</li>
+                    <li>Ultra Speed</li>
+                    <li>Gaming Priority</li>
+                </ul>
+                <button class="buy-button" onclick="openPaymentModal('Ultra Plan', 300)">Ksh 300 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg></button>
+            </div>
+            
+            <!-- <div class="plan-card">
+                <h2 class="plan-price">100GB for 21days</h2>
+                <!-- <div class="plan-price">300<span class="plan-currency">Ksh</span></div>
+                <div class="plan-description">Perfect for heavy users and gaming</div> -->
+                <!-- <ul class="plan-features">
+                    <li>100GB Data</li>
+                    <li>21 Days Validity</li>
+                    <li>Ultra Speed</li>
+                    <li>Gaming Priority</li>
+                </ul>
+                <button class="buy-button" onclick="openPaymentModal('Ultra Plan', 450)">Ksh 450 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg></button>
+            </div> --> -->
+
+            <div class="plan-card">
+                <h2 class="plan-price">UNLIMITED Monthly</h2>
+                <div class="most-popular">
+                    Most Popular
+                </div>
+                <div class="plan-price">400<span class="plan-currency">Ksh</span></div>
+                <div class="plan-description">Maximum speed for professionals</div>
+                <ul class="plan-features">
+                    <li>Unlimited Data</li>
+                    <li>30 Days Validity</li>
+                    <li>Maximum Speed</li>
+                    <li>24/7 Premium Support</li>
+                </ul>
+                <button class="buy-button" onclick="openPaymentModal('Professional Plan', 400)">Ksh 400 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg></button>
+            </div>
+        </div>
+        
+        <div class="activation-info">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <h2>Payment Instructions</h2>
+            <ol>
+                <li>Go to M-pesa on your phone</li>
+            <li>Select Lipa na M-pesa</li>
+            <li>Select 'Buy Goods and Services'</li>
+            <li>Enter Till Number: <strong>3153265</strong><button class="copy"><span class="material-symbols-outlined">content_copy</span>Copy</button></li>
+            <!-- <li>Enter Account Number: <strong>1121163</strong><button class="copy"><span class="material-symbols-outlined">content_copy</span>Copy</button></li>
+            <i>(Make sure you use the above account number and not your mobile number as account number or else your data will not be loaded)</i> -->
+            <li>Enter Amount: <i>(Package amount)</i></li>
+            <li>Enter your M-Pesa PIN</li>
+            <li style="margin-bottom: 1rem;">Confirm the payment (Jzon Solutions)</li>
+            <p>After the payment, your service will automatically be activated within 5 minutes.</p>
+            </ol>
+            
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>  
+        
+        <div class="feature-grid">
+            <div class="feature-item">
+                <div class="feature-icon">📶</div>
+                <h3>Global Coverage</h3>
+                <p>Connect anywhere in the world with our satellite network</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Experience speeds up to 200 Mbps with low latency</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🛡️</div>
+                <h3>Secure Connection</h3>
+                <p>Advanced encryption keeps your data safe and private</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📱</div>
+                <h3>Any Device</h3>
+                <p>Works seamlessly with phones, tablets, and computers</p>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="how-it-works-section">
+            <div class="section-header">
+                <h2>How Starlink Direct-To-Phone Works</h2>
+                <p>Revolutionary satellite technology that turns your phone into a global communication device</p>
+            </div>
+            
+            <div class="how-it-works-grid">
+                <div class="how-it-works-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Space-Based Cell Towers</h3>
+                        <p>Each Starlink satellite is equipped with an advanced eNodeB modem that acts like a cell tower in space, orbiting at just 550km above Earth - much closer than traditional satellites.</p>
+                    </div>
+                </div>
+                
+                <div class="how-it-works-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Direct Phone Connection</h3>
+                        <p>Your existing smartphone connects directly to satellites without any special hardware, apps, or pointing at the sky. It works with any LTE-compatible device you already own.</p>
+                    </div>
+                </div>
+                
+                <div class="how-it-works-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Seamless Network Integration</h3>
+                        <p>Satellites integrate with mobile networks like a standard roaming partner, automatically connecting and reconnecting as they move across the sky for uninterrupted service.</p>
+                    </div>
+                </div>
+                
+                <div class="how-it-works-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Global Coverage</h3>
+                        <p>The constellation provides connectivity in remote regions where traditional cell towers don't exist, eliminating mobile dead zones worldwide with near-universal coverage.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="technology-illustration">
+                <div class="illustration-container">
+                    <div class="earth"></div>
+                    <div class="satellite-network">
+                        <div class="network-satellite satellite-1"></div>
+                        <div class="network-satellite satellite-2"></div>
+                        <div class="network-satellite satellite-3"></div>
+                    </div>
+                    <div class="phone-device">
+                        <div class="signal-waves">
+                            <div class="wave wave-1"></div>
+                            <div class="wave wave-2"></div>
+                            <div class="wave wave-3"></div>
+                        </div>
+                    </div>
+                    <div class="connection-lines">
+                        <div class="line line-1"></div>
+                        <div class="line line-2"></div>
+                        <div class="line line-3"></div>
+                    </div>
+                </div>
+                <div class="illustration-text">
+                    <h3>No Ground Infrastructure Required</h3>
+                    <p>Traditional cellular networks rely on towers and cables. Starlink Direct-to-Cell eliminates this dependency by beaming connectivity directly from space to your phone.</p>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-to-packages" style="text-align: center;">
+            <button class="packages-button" onclick="scrollToPackages()">
+            View Packages <span class="arrow">↑</span>
+            </button>
+        </div>
+        <div class="contact-us how-it-works-item">
+        <p>In case of inquiries, <a href="mailto:starlinkafrica@tutamail.com">contact us</a></p>
+    </div>
+<!--     
+        <div class="bookmark-reminder">
+            <!-- 📌 Bookmark this page for easy access next time -->
+        <!-- </div> --> -->
+    </div>
+    
+    
+    <!-- Payment Modal -->
+
+        <div class="payment-modal" id="paymentModal">
+        <div class="modal-content"></div>
+            <button class="close-modal" onclick="closePaymentModal()">×</button>
+            <h2 id="modalTitle">Payment Details</h2>
+            <p id="modalDescription">You're about to purchase:</p>
+            <div id="modalPlan" style="font-size: 1.5rem; color: #4ecdc4; margin: 1rem 0;"></div>
+            <div id="modalPrice" style="font-size: 2rem; font-weight: bold; margin: 1rem 0;"></div>
+            
+            <div style="margin: 2rem 0; text-align: left;">
+            <h3 style="margin-bottom: 1rem;">M-Pesa Payment Instructions:</h3>
+            <ol style="line-height: 1.8; list-style-position: inside;">
+            <li>Go to M-pesa on your phone</li>
+            <li>Select 'Lipa na M-PESA'</li>
+            <li>Select 'Buy Goods and Services'</li>
+            <li>Enter Till Number: <strong>3153265</strong><button class="copy"><span class="material-symbols-outlined">content_copy</span>Copy</button></li>
+            <!-- <li>enter Account Number <strong>1121163</strong><button class="copy"><span class="material-symbols-outlined">content_copy</span>Copy</button></li> -->
+            <!-- <i>(Make sure you use the above account number and not your mobile number as account number or else your data will not be loaded)</i> -->
+            <li>Enter Amount: <strong id="paymentAmount"></strong></li>
+            <li>Enter your M-Pesa PIN</li>
+            <li style="margin-bottom: 1rem;">Confirm the payment (Jzon Solutions)</li>
+            <p>After the payment, your service will automatically be activated within 5 minutes</p>
+            </ol>
+            </div>
+            
+            <button class="buy-button" id="modal-buy" onclick="processPayment()">I've Made Payment</button>
+        </div>
+        </div>
+        <footer>
+            
+        </footer>
+</body>
+</html>

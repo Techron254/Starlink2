@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starlink Direct to phone service</title>
+<style>
+  :root{
+    --bg:#05070d;
+    --text:#eef1f7;
+    --text-muted:#8a93ab;
+    --accent:#0bf0e9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',Inter,Arial,sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    gap:28px;
+  }
+
+  .spinner{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:6px solid rgba(255,255,255,0.08);
+    border-top-color:var(--accent);
+    animation:spin 0.9s linear infinite;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
+  }
+
+  p{
+    font-size:16px;
+    color:var(--text-muted);
+    letter-spacing:0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .spinner{ animation-duration:2.4s; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="spinner" role="status" aria-label="Loading"></div>
+  <p>Please wait…</p>
+
+  <script>
+    setTimeout(function(){
+      window.location.href = "./mainpage.html";
+    }, 1000);
+  </script>
+
+</body>
+</html>
