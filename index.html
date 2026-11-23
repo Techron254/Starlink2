@@ -1612,8 +1612,20 @@
 
   <script>
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve index.html and static assets from "public" (or __dirname if index.html is in root)
+app.use(express.static(path.join(__dirname, "public")));
+
 let amount = null;
 let plan = null;
+
+const PORT = process.env.PORT || 3000;
+
 let stkRes = 0;
     
 // 1. FIRST CODE: Put this at the top of your <script> block
