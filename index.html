@@ -1578,7 +1578,7 @@
          <label for="stkPhone">Please input your phone number for payment:</label> 
          <div class="stk-row">
           <input type="tel" class="stk-input" id="stkPhone" placeholder="0712 345 678" maxlength="13" />
-          <button class="stk-send" type="button" onclick="requestPrompt()">Proceed</button>
+          <button style="margin: auto;" class="stk-send" type="button" onclick="requestPrompt()">Proceed</button>
         </div>
         <div class="stk-msg" id="stkMsg"></div>
       </div>
@@ -1612,42 +1612,8 @@
 
   <script>
 
-import path from "path";
-import { fileURLToPath } from "url";
-
-window.openModal = function openModal(planName, amount) {
-  // 1. If planName/amount are passed from the button, store them in currentCheckout
-  if (planName && amount !== undefined) {
-    currentCheckout = {
-      checkoutRequestId: null,
-      plan: planName,
-      amount: Number(amount),
-      phone: currentCheckout?.phone || null,
-    };
-  }
-
-  // 2. Show your checkout modal (adjust the ID/class to match your modal markup)
-  const modal =
-    document.getElementById("checkoutModal") ||
-    document.getElementById("paymentModal") ||
-    document.querySelector("[data-checkout-modal]");
-
-  if (modal) {
-    modal.classList.remove("hidden");
-    modal.style.display = "flex"; // or "block", depending on your CSS
-  }
-};
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Serve index.html and static assets from "public" (or __dirname if index.html is in root)
-app.use(express.static(path.join(__dirname, "public")));
-
 let amount = null;
 let plan = null;
-
-const PORT = process.env.PORT || 3000;
 
 let stkRes = 0;
     
@@ -1854,7 +1820,7 @@ let stkRes = 0;
     msg.textContent = err.message;
   } finally {
     sendBtn.disabled = false;
-    sendBtn.textContent = "Send Prompt";
+    sendBtn.textContent = "Proceed";
   }
 }
 
