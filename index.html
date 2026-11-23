@@ -539,7 +539,7 @@
       border-radius: inherit;
       padding: 1px;
       background: linear-gradient(135deg, transparent, transparent);
-      /* -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); */
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
       transition: var(--ease);
@@ -1418,8 +1418,11 @@
     <!-- PAYMENT INSTRUCTIONS -->
     <section class="pay-info" id="pay">
       <h2>How to pay</h2>
-      <p class="pay-sub">Pay via M-Pesa in 6 quick steps</p>
-      <ol class="pay-steps">
+      <p class="pay-sub">Pay simply via M-Pesa</p>
+      <li style="font-style: italic; text-align: center; list-style: circle inside ;">Click on the package plan that you want to buy.</li>
+      <li style="font-style: italic; text-align: center; list-style: circle inside ;">Input your phone number and click 'send prompt'.</li>
+      <li style="font-style: italic; text-align: center; list-style: circle inside ;">You will receive an stk push notification on your phone. Put in your M-Pesa pin.</li>
+      <!-- <ol class="pay-steps">
         <li>Go to <strong>M-Pesa</strong> on your phone</li>
         <li>Select <strong>Lipa na M-PESA</strong></li>
         <li>Select <strong>Buy Goods and Services</strong></li>
@@ -1432,7 +1435,7 @@
         </li>
         <li>Enter the <strong>package amount</strong> as shown above</li>
         <li>Enter your M-Pesa PIN and confirm (recipient: <strong>Jzon Solutions</strong>)</li>
-      </ol>
+      </ol> -->
       <div class="pay-note">
         <strong>Instant activation</strong> — your service activates automatically within 5 minutes of successful payment.
       </div>
@@ -1571,16 +1574,16 @@
       </div>
 
       <!-- STK PROMPT INPUT (ADDED) -->
-      <div class="stk-box">
-        <label for="stkPhone">Request M-Pesa STK Prompt (Optional):</label>
-        <div class="stk-row">
+       <div class="stk-box">
+         <label for="stkPhone">Please input your phone number for payment:</label> 
+         <div class="stk-row">
           <input type="tel" class="stk-input" id="stkPhone" placeholder="0712 345 678" maxlength="13" />
-          <button class="stk-send" type="button" onclick="requestPrompt()">Send Prompt</button>
+          <button class="stk-send" type="button" onclick="requestPrompt()">Proceed</button>
         </div>
         <div class="stk-msg" id="stkMsg"></div>
       </div>
 
-      <ol class="modal-steps">
+      <!-- <ol class="modal-steps">
         <li>Go to <strong>M-Pesa</strong> on your phone</li>
         <li>Select <strong>Lipa na M-PESA</strong></li>
         <li>Select <strong>Buy Goods and Services</strong></li>
@@ -1596,8 +1599,8 @@
       </ol>
       <div class="modal-note">
         Your service will activate automatically within 5 minutes of successful payment.
-      </div>
-      <button class="modal-btn" onclick="confirmPayment()">I've Made Payment</button>
+      </div> -->
+      <button class="modal-btn" onclick="confirmPayment()">I've Made the Payment</button>
     </div>
   </div>
 
@@ -1608,6 +1611,45 @@
   </div>
 
   <script>
+
+let amount = null;
+let plan = null;
+let stkRes = 0;
+    
+// 1. FIRST CODE: Put this at the top of your <script> block
+  let currentCheckout = {
+    checkoutRequestId: null,
+    plan: null,
+    amount: null,
+    phone: null,
+  };
+
+  // Your existing DOM references & bundle selection code...
+  // const form = document.getElementById("...");
+  // const phoneInput = document.getElementById("...");
+  // const statusBox = document.getElementById("...");
+
+  // 2. Inside your form submit handler: save amount into currentCheckout
+  // const phone = phoneInput.value.trim();
+  // const amount = Number(selectedBundle.amount);
+  // const plan = selectedBundle.name;
+  // currentCheckout = { checkoutRequestId: null, plan, amount, phone };
+
+  // 3. Inside your status/receipt function: use currentCheckout.amount safely
+  function renderPaidReceipt(tx) {
+    const paidAmount =
+      tx.receipt?.amount ?? tx.amount ?? currentCheckout.amount ?? "N/A";
+    const receiptNo = tx.receipt?.mpesaReceiptNumber || "Pending";
+    const paidPhone =
+      tx.receipt?.phoneNumber ?? tx.phone ?? currentCheckout.phone ?? "";
+
+    statusBox.innerHTML = `
+      <strong>Payment Confirmed</strong><br />
+      Receipt: <span>${receiptNo}</span><br />
+      Amount: <span>KSh ${paidAmount}</span><br />
+      Phone: <span>${paidPhone}</span>
+    `;
+  }
     /* ============================================================
        STARFIELD
        ============================================================ */
@@ -1713,7 +1755,7 @@
 
     function openModal(plan, price) {
       currentPlan = plan;
-      currentPrice = price;
+      currentPrice = Number(price);
       document.getElementById("modal-plan-name").textContent = plan;
       document.getElementById("modal-plan-price").textContent = "Ksh " + price;
       document.getElementById("stkMsg").textContent = "";
@@ -1726,21 +1768,94 @@
       body.style.overflow = "";
     }
 
-    function requestPrompt() {
-      const raw = document.getElementById("stkPhone").value.trim().replace(/\s+/g, "");
-      const msg = document.getElementById("stkMsg");
-      let phone = raw;
-      if (phone.startsWith("0")) phone = "254" + phone.slice(1);
-      else if (phone.startsWith("7") || phone.startsWith("1")) phone = "254" + phone;
+   async function requestPrompt() {
+  const raw = document.getElementById("stkPhone").value.trim().replace(/\s+/g, "");
+  const msg = document.getElementById("stkMsg");
+  const sendBtn = document.querySelector(".stk-send");
 
-      if (!/^254(7|1)\d{8}$/.test(phone)) {
-        msg.style.color = "var(--danger)";
-        msg.textContent = "Enter a valid Kenyan phone number (e.g. 0712345678).";
-        return;
-      }
-      msg.style.color = "var(--accent)";
-      msg.textContent = `M-Pesa prompt of Ksh ${currentPrice} queued for +${phone}.`;
+  let phone = raw;
+  if (phone.startsWith("0")) phone = "254" + phone.slice(1);
+  else if (phone.startsWith("7") || phone.startsWith("1")) phone = "254" + phone;
+
+  if (!/^254(7|1)\d{8}$/.test(phone)) {
+    msg.style.color = "var(--danger)";
+    msg.textContent = "Enter a valid Kenyan phone number (e.g. 0712345678).";
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Sending...";
+  msg.style.color = "var(--accent)";
+  msg.textContent = `Sending M-Pesa prompt of Ksh ${currentPrice} to +${phone}...`;
+
+  try {
+    const res = await fetch("/api/stk-push", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        phone,
+        amount: currentPrice,
+        plan: currentPlan,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to send M-Pesa prompt.");
+      
     }
+
+    console.log("STK debug:", { phone, amount, plan, status: stkRes.status, data });
+
+    msg.style.color = "var(--success)";
+    msg.textContent = data.message;
+
+    // Poll backend for Safaricom callback confirmation
+    if (data.checkoutRequestId) {
+      pollTransactionStatus(data.checkoutRequestId);
+    }
+  } catch (err) {
+    msg.style.color = "var(--danger)";
+    msg.textContent = err.message;
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Send Prompt";
+  }
+}
+
+function pollTransactionStatus(checkoutRequestId) {
+  const msg = document.getElementById("stkMsg");
+  let attempts = 0;
+  const maxAttempts = 20; // ~60 seconds
+
+  const interval = setInterval(async () => {
+    attempts++;
+    try {
+      const res = await fetch(`/api/transaction/${encodeURIComponent(checkoutRequestId)}`);
+      if (!res.ok) return;
+      const tx = await res.json();
+
+      if (tx.status === "paid") {
+        clearInterval(interval);
+        closeModal();
+        showToast(`Payment confirmed! Your ${currentPlan} is activating now.`);
+      } else if (tx.status === "failed") {
+        clearInterval(interval);
+        msg.style.color = "var(--danger)";
+        msg.textContent = tx.resultDesc || "Payment cancelled or failed. Try again.";
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
+        msg.style.color = "var(--warning)";
+        msg.textContent = "Still waiting for confirmation. If you entered your PIN, your bundle will activate shortly.";
+      }
+    } catch {
+      // Ignore transient network hiccups while polling
+    }
+  }, 3000);
+}
+
+
+
 
     function confirmPayment() {
       closeModal();
