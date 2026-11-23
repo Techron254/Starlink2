@@ -242,10 +242,20 @@ app.get("/api/transaction/:checkoutRequestId", (req, res) => {
   return res.json(tx);
 });
 
+
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
   console.log(
     `M-Pesa env: ${MPESA_ENV} (${BASE_URL}) | Shortcode: ${HEAD_OFFICE_SHORTCODE} | Till: ${TILL_NUMBER}`
   );
   console.log(`Callback URL: ${CALLBACK_URL || "NOT SET"}`);
+});
+
+app.get("/health", (req, res) => {
+  return res.status(200).json({
+    status: "ok",
+    env: MPESA_ENV,
+    uptimeSeconds: Math.floor(process.uptime()),
+  });
 });
