@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -11,9 +12,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 
-// Serve static frontend files if located in parent folder or current folder
-app.use(express.static(path.join(__dirname, "..")));
+// Serve static frontend files from current folder first, then parent folder if needed
 app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "..")));
 
 const PORT = Number(process.env.PORT || 3000);
 const MPESA_ENV = (process.env.MPESA_ENV || "sandbox").trim().toLowerCase();
@@ -103,6 +104,14 @@ async function getAccessToken() {
   return parsed.data.access_token;
 }
 
+app.get("/health", (req, res) => {
+  return res.status(200).json({
+    status: "ok",
+    env: MPESA_ENV,
+    uptimeSeconds: Math.floor(process.uptime()),
+  });
+});
+
 app.post("/api/stk-push", async (req, res) => {
   try {
     const normalizedPhone = normalizeKenyanPhone(req.body?.phone);
@@ -125,7 +134,6 @@ app.post("/api/stk-push", async (req, res) => {
 
     const token = await getAccessToken();
 
-    // --- SECOND LAST CODE GOES HERE ---
     const isProduction = MPESA_ENV === "production";
     const transactionType = isProduction
       ? "CustomerBuyGoodsOnline"
@@ -149,7 +157,6 @@ app.post("/api/stk-push", async (req, res) => {
       AccountReference: plan.slice(0, 12) || "StarlinkKE",
       TransactionDesc: `Starlink ${plan}`.slice(0, 13),
     };
-    // -----------------------------------
 
     const stkRes = await fetch(`${BASE_URL}/mpesa/stkpush/v1/processrequest`, {
       method: "POST",
@@ -195,6 +202,7 @@ app.post("/api/stk-push", async (req, res) => {
     return res.status(500).json({ error: err.message || "Internal server error" });
   }
 });
+
 function parseCallbackMetadata(items = []) {
   const map = {};
   for (const item of items) {
@@ -242,20 +250,23 @@ app.get("/api/transaction/:checkoutRequestId", (req, res) => {
   return res.json(tx);
 });
 
+// Explicit homepage fallback so "/" never renders blank
+app.get("/", (req, res) => {
+  const localIndex = path.join(__dirname, "index.html");
+  const parentIndex = path.join(__dirname, "..", "index.html");
+  if (fs.existsSync(localIndex)) {
+    return res.sendFile(localIndex);
+  }
+  if (fs.existsSync(parentIndex)) {
+    return res.sendFile(parentIndex);
+  }
+  return res.status(404).send("index.html not found");
+});
 
-
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on 0.0.0.0:${PORT}`);
   console.log(
     `M-Pesa env: ${MPESA_ENV} (${BASE_URL}) | Shortcode: ${HEAD_OFFICE_SHORTCODE} | Till: ${TILL_NUMBER}`
   );
   console.log(`Callback URL: ${CALLBACK_URL || "NOT SET"}`);
-});
-
-app.get("/health", (req, res) => {
-  return res.status(200).json({
-    status: "ok",
-    env: MPESA_ENV,
-    uptimeSeconds: Math.floor(process.uptime()),
-  });
 });
